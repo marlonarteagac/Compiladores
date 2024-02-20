@@ -3,7 +3,7 @@ package lexico_compi;
 import java.util.Scanner;
 
 public class AnalizadorLexico {
-
+//agregue el comentario para actualizar en git
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
