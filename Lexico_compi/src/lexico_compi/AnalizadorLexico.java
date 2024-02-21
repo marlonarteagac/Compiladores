@@ -54,17 +54,22 @@ public class AnalizadorLexico {
                 char caracter_siguiente = (k + 1 < arreglo_texto.length) ? arreglo_texto[k + 1] : ' ';
 
 
-               System.out.println("k siguiente es :" + caracter_siguiente);
+//               System.out.println("k siguiente es :" + caracter_siguiente);
 
                 if (esOperador(caracter_actual) && esLetra(caracter_siguiente)) {
                     System.out.println("no se puede letra despues de operador, flata identificador de variable");
+                    break;
           
                 }else if (esidentificador(caracter_siguiente) && esLetra(caracter_siguiente)) {
                     System.out.println("letra despues de identificador");
+                    continue;
+                }else if (!esidentificador(caracter_actual) && !esLetra(caracter_actual) && !esOperador(caracter_actual) && caracter_actual!='_') {
+                    System.out.println("error: hay un caracter no valido");
                     break;
                 }
  
                 k++;
+          
             }
 
             // Validar las variables
@@ -101,7 +106,8 @@ public class AnalizadorLexico {
                 } else {
                     resultado += " - válida " + mv + "\n";
                 }
-
+               
+   
             }
         }
         System.out.println("" + resultado);
@@ -125,7 +131,7 @@ public class AnalizadorLexico {
             }
 
             // Regla 2: Debe empezar por una letra
-            if (i == 0 && !((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))) {
+            if (i == 0 && !((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c=='_')) {
                 System.out.println("Debe empezar por una letra la variable");
                 return false;
             }
@@ -151,4 +157,6 @@ public class AnalizadorLexico {
     private static boolean esidentificador(char c) {
         return c == '$' || c == '#' || c == '!';
     }
+    
+  
 }
