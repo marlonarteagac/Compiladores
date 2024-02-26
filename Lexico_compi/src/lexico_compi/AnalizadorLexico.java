@@ -6,7 +6,7 @@ public class AnalizadorLexico {
 //agregue el comentario para actualizar en git
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-
+//pepitoperez
         System.out.println("Ingrese un texto (máximo 20 caracteres): ");
         String texto = scanner.nextLine();
         String resultado = "";
