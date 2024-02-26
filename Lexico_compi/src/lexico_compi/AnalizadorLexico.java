@@ -19,8 +19,9 @@ public class AnalizadorLexico {
             char[] arreglo_texto = texto.toCharArray();
             int[] identificadores = new int[arreglo_texto.length]; // Tamaño del array de identificadores
 
-            char[] operadoresEncontrados = new char[arreglo_texto.length];
+            String[] operadoresEncontrados = new String [arreglo_texto.length];
             int contadorOperadores = 0;
+            
 
             for (int i = 0; i < arreglo_texto.length; i++) {
                 switch (arreglo_texto[i]) {
@@ -28,10 +29,11 @@ public class AnalizadorLexico {
                     case '-':
                     case '*':
                     case '/':
-                        operadoresEncontrados[contadorOperadores] = arreglo_texto[i];
+                        operadoresEncontrados[i] = String.valueOf(arreglo_texto[i]);
                         contadorOperadores++;
-                        // System.out.println("encontradors" + arreglo_texto[i]);
-
+                       System.out.println("operadores encontrados" + arreglo_texto[i] );
+                    
+          
                 }
 
             }
@@ -186,11 +188,27 @@ public class AnalizadorLexico {
                     System.out.println("Variable " + (p + 1) + ": " + arregloVariables[p]);
                 }
 
+ 
+
             }
             System.out.println("contador operadores: " + contadorOperadores);
             System.out.println("contador variables: " + var_cont);
 
+            
+            String[] nuevoArreglo = new String[arregloVariables.length + operadoresEncontrados.length];
+            for (int i = 0; i < nuevoArreglo.length; i++) {
+                if (i % 2 == 0) {
+                    nuevoArreglo[i] = arregloVariables[i / 2];
+                } else {
+                    nuevoArreglo[i] =  operadoresEncontrados[i / 2];
+                }
+
+              System.out.println("nuevo arreglo: " + nuevoArreglo[i]);
+            }
+           
+         
         }
+      
 
     }
 
