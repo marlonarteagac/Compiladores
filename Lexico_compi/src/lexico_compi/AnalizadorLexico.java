@@ -1,5 +1,6 @@
 package lexico_compi;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class AnalizadorLexico {
@@ -18,10 +19,9 @@ public class AnalizadorLexico {
         } else {
             char[] arreglo_texto = texto.toCharArray();
             int[] identificadores = new int[arreglo_texto.length]; // Tamaño del array de identificadores
-
-            String[] operadoresEncontrados = new String [arreglo_texto.length];
+            int l = arreglo_texto.length;
+            String[] operadoresEncontrados = new String[arreglo_texto.length];
             int contadorOperadores = 0;
-            
 
             for (int i = 0; i < arreglo_texto.length; i++) {
                 switch (arreglo_texto[i]) {
@@ -31,9 +31,8 @@ public class AnalizadorLexico {
                     case '/':
                         operadoresEncontrados[i] = String.valueOf(arreglo_texto[i]);
                         contadorOperadores++;
-                       System.out.println("operadores encontrados" + arreglo_texto[i] );
-                    
-          
+                        // System.out.println("operadores encontrados" + arreglo_texto[i] );
+
                 }
 
             }
@@ -77,28 +76,27 @@ public class AnalizadorLexico {
                 // char caracter3 = (k + 2 < arreglo_texto.length) ? arreglo_texto[k + 2] : ' ';
 
                 if (esidentificador(caracter_actual) && esLetra(caracter_siguiente)) {
-                    System.out.println("paso 1");
+                    // System.out.println("paso 1");
                     k++;
 
-                }else if (esidentificador(caracter_actual)) {
+                } else if (esidentificador(caracter_actual)) {
                     if (esNumero(caracter_siguiente)) {
                         bandera = 1;
                         break;
                     }
                 }
-                
+
                 else if (esOperador(caracter_actual)) {
                     if (esLetra(caracter_siguiente)) {
                         bandera = 1;
                         break;
                     }
-                }else if (esidentificador(caracter_actual)) {
+                } else if (esidentificador(caracter_actual)) {
                     if (esidentificador(caracter_siguiente)) {
                         bandera = 1;
                         break;
                     }
                 }
-                
 
                 k++;
 
@@ -126,7 +124,7 @@ public class AnalizadorLexico {
                     continue;
 
                 }
-
+//SACAR LAS VARIABLES DESPUES DEL IDENTIFICADOR
                 int finVar = identificadores[i];
                 int inicioVar = identificadores[i - 1] + 1;
                 int longitudVariable = finVar - inicioVar;
@@ -140,7 +138,7 @@ public class AnalizadorLexico {
 
                 }
 
-                // // PARA GUARDAR LA VARIABLE COMPLETA EN EL ARREGLO PARA ORDENAR
+                // // PARA GUARDAR LA VARIABLE COMPLETA EN EL ARREGLO PARA ORDENAR CON EL IDENTIFICADOR
                 int a_finVar = identificadores[i];
                 int a_inicioVar = identificadores[i - 1];
                 int a_longitudVariable = a_finVar - a_inicioVar;
@@ -178,9 +176,7 @@ public class AnalizadorLexico {
 
                 // HASTA AQUI LLEGA LA CUESTION DE LAS VARIABLES
 
-            }
-
-            // FIN DEL FOR PRINCIPAL
+            } // FIN DEL FOR PRINCIPAL
 
             // IMPRIMIR LAS VARIABLES COMPLETAS
             for (int p = 0; p < arregloVariables.length; p++) {
@@ -188,31 +184,116 @@ public class AnalizadorLexico {
                     System.out.println("Variable " + (p + 1) + ": " + arregloVariables[p]);
                 }
 
- 
-
             }
             System.out.println("contador operadores: " + contadorOperadores);
             System.out.println("contador variables: " + var_cont);
 
-            
-            String[] nuevoArreglo = new String[arregloVariables.length + operadoresEncontrados.length];
+            System.out.println("ahora a ordenar");
+            // UNIR LOS ARREGLOS EN UNO SOLO ARREGLO PARA ORDENARLOS
+            String[] nuevoArreglo = unirArreglos(eliminarNull(arregloVariables), eliminarNull(operadoresEncontrados));
+            System.out.println("arreglo nuevoArreglo"+Arrays.toString(nuevoArreglo));
+            for (int j = 0; j < nuevoArreglo.length; j++) {
+
+            }
+
+            String[] ordenado = new String[nuevoArreglo.length];
+            int j = 0;
+            int n = 1;
             for (int i = 0; i < nuevoArreglo.length; i++) {
-                if (i % 2 == 0) {
-                    nuevoArreglo[i] = arregloVariables[i / 2];
+
+                String c = (nuevoArreglo[i]);
+                System.out.println("VALOR A GUARDAR " + c);
+                if ((String.valueOf(c).equals("+")) || (String.valueOf(c).equals("-"))  || (String.valueOf(c).equals("*"))|| (String.valueOf(c).equals("/"))  ) {
+                    ordenado[n] = nuevoArreglo[i];
+                    n = n + 2;
                 } else {
-                    nuevoArreglo[i] =  operadoresEncontrados[i / 2];
+                   
+
+                    ordenado[j] = nuevoArreglo[i];
+                    j = j + 2;
                 }
 
-              System.out.println("nuevo arreglo: " + nuevoArreglo[i]);
+                // System.out.println("----------------"+nuevoArreglo[j]+"----------------"+ordenado[i]+"----------------");
             }
-           
-         
+
+            System.out.println(Arrays.toString(ordenado));
+
+            System.out.println("arreglo ORDENADO de operadores y tipos de variables");
+
+            for (int h=0; h < nuevoArreglo.length ; h++){
+            System.out.println ("posición "+h+" valor "+ordenado[h]);
+
+            }
+
         }
-      
 
     }
 
+    public static String[] eliminarNull(String[] arreglo) {
+
+        int nuevoTamanio = 0;
+        for (String valor : arreglo) {
+            if (valor != null) {
+                nuevoTamanio++;
+            }
+        }
+
+        String[] nuevoArreglo = new String[nuevoTamanio];
+        int j = 0;
+        for (String valor : arreglo) {
+            if (valor != null) {
+                nuevoArreglo[j++] = valor;
+            }
+        }
+        return nuevoArreglo;
+    }
+
+    public static String[] unirArreglos(String[] arreglo1, String[] arreglo2) {
+        int longitudTotal = (arreglo1.length + arreglo2.length);
+        String[] nuevoArreglo = new String[longitudTotal];
+        int indiceNuevoArreglo = 0;
+
+        // Recorrer ambos arreglos y agregar elementos al nuevo arreglo
+        for (String elemento : arreglo1) {
+            if (elemento != null) {
+                nuevoArreglo[indiceNuevoArreglo++] = elemento;
+            }
+        }
+        for (String elemento : arreglo2) {
+            if (elemento != null) {
+                nuevoArreglo[indiceNuevoArreglo++] = elemento;
+            }
+        }
+
+        return nuevoArreglo;
+    }
+
     // System.out.println("" + resultado + "");
+    // public static void organizarArreglo(String[] variables, char[] operadores,
+    // String[] nuevoArreglo) {
+    // int indiceVariable = 0;
+    // int indiceOperador = 1;
+    // int indiceNuevoArreglo = 0;
+
+    // // Recorrer los arreglos intercalando variables y operadores
+    // while (indiceVariable < variables.length && indiceOperador <
+    // operadores.length) {
+    // nuevoArreglo[indiceNuevoArreglo++] = variables[indiceVariable++];
+    // nuevoArreglo[indiceNuevoArreglo++] =
+    // String.valueOf(operadores[indiceOperador++]);
+    // }
+
+    // // Agregar las variables restantes al nuevo arreglo
+    // while (indiceVariable < variables.length) {
+    // nuevoArreglo[indiceNuevoArreglo++] = variables[indiceVariable++];
+    // }
+
+    // // Agregar los operadores restantes al nuevo arreglo
+    // while (indiceOperador < operadores.length) {
+    // nuevoArreglo[indiceNuevoArreglo++] =
+    // String.valueOf(operadores[indiceOperador++]);
+    // }
+    // }
 
     public static boolean validarvariable(char[] caracteres) {
 
@@ -256,11 +337,10 @@ public class AnalizadorLexico {
     private static boolean esOperador(char c) {
         return c == '+' || c == '-' || c == '*' || c == '/';
     }
+
     private static boolean esNumero(char c) {
-        return (c >= '0' && c <= '9') ;
+        return (c >= '0' && c <= '9');
     }
-
-
 
     private static boolean esidentificador(char c) {
         return c == '$' || c == '#' || c == '!';
