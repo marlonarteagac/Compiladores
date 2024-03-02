@@ -109,9 +109,14 @@ public class vista extends javax.swing.JFrame {
         lexico = 0;
         sintactico = 0;
         semantico = 0;
+
     }// GEN-LAST:event_btn_limpiarActionPerformed
 
     private void txt_textoActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txt_textoActionPerformed
+        lexico = 0;
+        sintactico = 0;
+        semantico = 0;
+        String r = "";
         Scanner scanner = new Scanner(System.in);
         // pepitoperez
         System.out.println("Ingrese un texto (máximo 20 caracteres): ");
@@ -125,6 +130,7 @@ public class vista extends javax.swing.JFrame {
             txt_mensaje.append("" + validarLongitudTexto(texto) + "\n");
             if (texto.isEmpty()) {
                 resultado = "Por favor, ingrese un texto.";
+                txt_mensaje.append(resultado);
 
             } else {
                 char[] arreglo_texto = texto.toCharArray();
@@ -178,6 +184,7 @@ public class vista extends javax.swing.JFrame {
                 }
 
                 // con este while verifico los caracteres para decir si es valido o no
+                // VALIDACION DEL TEXTO
                 int k = 0;
                 while (k < arreglo_texto.length) {
                     char caracter_actual = arreglo_texto[k];
@@ -349,7 +356,7 @@ public class vista extends javax.swing.JFrame {
                     // ESTE CONDICIONAL VALIDA QUE SE CUMPLA QUE LOS OPERADORES
                     // DEBEN SER IGUAL AL NUMERO DE VARIABLES -1 PARA DAR CUMPLIMIENTO
                     // AL TEMA SINTACTICO DE LAS OPERACIONES
-                    if (totaloperadores == contadorOperadores) {
+                    if (totaloperadores == contadorOperadores && (totaloperadores > 0)) {
                         txt_mensaje.append("Operadores SI es igual a la cantidad de variables - 1\n");
 
                         // SI SE CUMPLE LA CONDICIO DADA ARRIBA DE LOS OPERADORES SE ORDENA
@@ -395,7 +402,8 @@ public class vista extends javax.swing.JFrame {
                             // System.out.println("----------------"+nuevoArreglo[j]+"----------------"+ordenado[i]+"----------------");
                         }
 
-                        txt_mensaje.append( "----------------------------------------ORDENAMIENTO--------------------------------------------\n");
+                        txt_mensaje.append(
+                                "----------------------------------------ORDENAMIENTO--------------------------------------------\n");
                         txt_mensaje.append(Arrays.toString(ordenado) + "\n");
 
                         System.out.println("arreglo ORDENADO de operadores y tipos de variables");
@@ -404,27 +412,38 @@ public class vista extends javax.swing.JFrame {
                             System.out.println("posición " + h + " valor " + ordenado[h]);
 
                         }
-                        //SI EL SINTACTICO CUMPLE CON LAS REGLAS LE ASIGNO 1 A SU VARIABLE
-                        //PARA PERMITIR SEGUIR AL SEMANTICO
+                        // SI EL SINTACTICO CUMPLE CON LAS REGLAS LE ASIGNO 1 A SU VARIABLE
+                        // PARA PERMITIR SEGUIR AL SEMANTICO
                         sintactico = 1;
-                        if (sintactico == 1) {
-                            txt_mensaje.append( "----------------------------------------SEMANTICO--------------------------------------------\n");
-                               txt_mensaje.append(""+Arrays.toString(ordenado)+"\n");
 
-                               for (int i = 0; i < ordenado.length; i++) {
+                        if (sintactico == 1) {
+                            txt_mensaje.append("----------------------------------------SEMANTICO--------------------------------------------\n");
+                            txt_mensaje.append("" + Arrays.toString(ordenado) + "\n");
+
+                            for (int i = 0; i < ordenado.length; i++) {
                                 int posicion = i;
                                 char primeraLetra = idVariables(ordenado, posicion);
-                                txt_mensaje.append("\n"+" posición: " + posicion + " es: " + primeraLetra);
 
-                                if(primeraLetra=="$");
-                                txt_mensaje.append("siciertowe");
-                               }
-                              
+                                // txt_mensaje.append("\n" + " posición: " + posicion + " es: " + primeraLetra);
 
+                                //CONCATENAR LAS VARIABLES DE LAS POSICIONES PAR
+                                for (int l = 0; l < ordenado.length; l++) {
+                                    if (i % 2 == 0) {
+                                        r += ordenado[i];
+                                        break;
+
+                                    }
+
+                                }
+
+                            }
+                            txt_mensaje.append("----------------------------------------CONCATENACIÓN-----------------------------------------\n");
+                            txt_mensaje.append(""+r);
                         }
+
                     } else {
                         txt_mensaje.append("Operadores NO es igual a la cantidad de variables - 1\n");
-                        
+
                     }
 
                 }
@@ -494,22 +513,23 @@ public class vista extends javax.swing.JFrame {
 
         return nuevoArreglo;
     }
+
     public static char idVariables(String[] arregloTextos, int posicion) {
 
-    // Validar la posición
-    if (posicion < 0 || posicion >= arregloTextos.length) {
-        throw new IllegalArgumentException("Posición invalida: " + posicion);
+        // Validar la posición
+        if (posicion < 0 || posicion >= arregloTextos.length) {
+            throw new IllegalArgumentException("Posición invalida: " + posicion);
+        }
+
+        // Obtener el texto en la posición indicada
+        String texto = arregloTextos[posicion];
+
+        // Obtener la primera letra del texto
+        char primeraLetra = texto.charAt(0);
+
+        // Devolver la primera letra
+        return primeraLetra;
     }
-
-    // Obtener el texto en la posición indicada
-    String texto = arregloTextos[posicion];
-
-    // Obtener la primera letra del texto
-    char primeraLetra = texto.charAt(0);
-
-    // Devolver la primera letra
-    return primeraLetra;
-}
 
     public static String validarLongitudTexto(String texto) {
         int longitudMaxima = 20;
@@ -523,6 +543,22 @@ public class vista extends javax.swing.JFrame {
             return "Te quedan " + caracteresRestantes + " caracteres de los " + longitudMaxima
                     + " disponibles.";
         }
+    }
+
+    public static String concatenarVariables(String[] arreglo) {
+
+        String resultado = "";
+
+        for (String elemento : arreglo) {
+            if (elemento.startsWith("$") && elemento.equals("+")) {
+                resultado += elemento;
+            } else {
+                // Manejar la excepción: elemento no válido
+                throw new IllegalArgumentException("Elemento no válido: " + elemento);
+            }
+        }
+
+        return resultado;
     }
 
     // public static boolean validarvariable(char[] caracteres) {
