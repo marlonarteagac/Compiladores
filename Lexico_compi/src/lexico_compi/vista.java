@@ -6,10 +6,10 @@ package lexico_compi;
 
 import java.util.Arrays;
 import java.util.Scanner;
-import static lexico_compi.AnalizadorLexico.Mensaje;
-import static lexico_compi.AnalizadorLexico.eliminarNull;
-import static lexico_compi.AnalizadorLexico.unirArreglos;
-import static lexico_compi.AnalizadorLexico.validarLongitudTexto;
+// import static lexico_compi.AnalizadorLexico.Mensaje;
+// import static lexico_compi.AnalizadorLexico.eliminarNull;
+// import static lexico_compi.AnalizadorLexico.unirArreglos;
+// import static lexico_compi.AnalizadorLexico.validarLongitudTexto;
 import static lexico_compi.AnalizadorLexico.validarvariable;
 
 /**
@@ -105,10 +105,10 @@ public class vista extends javax.swing.JFrame {
 
     private void btn_limpiarActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btn_limpiarActionPerformed
         Limpiar();
-        //REINICIO LEXICO A 0 PARA QUE NO HAYA ERROR
-        lexico=0;
-        sintactico=0;
-        semantico=0;
+        // REINICIO LEXICO A 0 PARA QUE NO HAYA ERROR
+        lexico = 0;
+        sintactico = 0;
+        semantico = 0;
     }// GEN-LAST:event_btn_limpiarActionPerformed
 
     private void txt_textoActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txt_textoActionPerformed
@@ -205,6 +205,13 @@ public class vista extends javax.swing.JFrame {
                             break;
                         }
                     }
+                    if (k <= 1) {
+
+                        if (esLetra(caracter_actual)) {
+                            bandera = 1;
+                            break;
+                        }
+                    }
 
                     if (esidentificador(caracter_actual)) {
                         if (esidentificador(caracter_siguiente)) {
@@ -239,25 +246,27 @@ public class vista extends javax.swing.JFrame {
 
                 txt_mensaje.append(
                         "----------------------------------------LEXICO--------------------------------------------\n ");
-            //DESPUES DE LAS REGLAS EJECUTO SI LA BANDERA TIENE ALGUN VALOR <=0 PARA DETERMINAR SI CUMPLE 
-            //O NO CUMPLE CON LAS REGLAS.
+                // DESPUES DE LAS REGLAS EJECUTO SI LA BANDERA TIENE ALGUN VALOR <=0 PARA
+                // DETERMINAR SI CUMPLE
+                // O NO CUMPLE CON LAS REGLAS.
                 if (bandera <= 0) {
                     bandera = 0;
                     Mensaje(bandera);
-                    //A LEXICO LE CAMBIO EL VALOR GLOBAL SI SE CUMPLEN LAS REGLAS
+                    // A LEXICO LE CAMBIO EL VALOR GLOBAL SI SE CUMPLEN LAS REGLAS
                     lexico = 1;
 
                 } else if (bandera > 0) {
-                    //CASO DADO QUE LA BANDERA SEA 1 Y SE ACTIVE EL BREAK, SE TERMINA HASTA DONDE IBA LA VALIDACION
-                    //Y MARCA QUE EL TEXTO NO ES VALIDO
+                    // CASO DADO QUE LA BANDERA SEA 1 Y SE ACTIVE EL BREAK, SE TERMINA HASTA DONDE
+                    // IBA LA VALIDACION
+                    // Y MARCA QUE EL TEXTO NO ES VALIDO
                     bandera = 1;
                     Mensaje(bandera);
-                    
 
                 }
-                //SI LAS REGLAS SE CUMPLE, LEXICO VALE 1, Y EJECUTARÁ TODO LO QUE ESTÁ EN EL
-                //CONDICIONAL, CASO CONTRARIO MUESTRA EL MENSJAE DEL METODO TEXTO NO VALIDO Y NO 
-                //MOSTRARA NADA MÁS
+                // SI LAS REGLAS SE CUMPLE, LEXICO VALE 1, Y EJECUTARÁ TODO LO QUE ESTÁ EN EL
+                // CONDICIONAL, CASO CONTRARIO MUESTRA EL MENSJAE DEL METODO TEXTO NO VALIDO Y
+                // NO
+                // MOSTRARA NADA MÁS
                 if (lexico >= 1) {
                     // ARREGLO PARA GUARDAR LAS VARIABLES COMPLETAS}
                     String[] arregloVariables = new String[contador];
@@ -295,7 +304,8 @@ public class vista extends javax.swing.JFrame {
                         // // PARA GUARDAR LA VARIABLE COMPLETA EN EL ARREGLO PARA ORDENAR CON EL
                         // IDENTIFICADOR
                         int a_finVar = identificadores[i];
-                        int a_inicioVar = identificadores[i - 1];
+                        int a_inicioVar = identificadores[i - 1]; // EN ESTA PARTE ES QUE ASIGNO EL IDENTIFICADOR A LA
+                                                                  // VARIABLE
                         int a_longitudVariable = a_finVar - a_inicioVar;
 
                         char[] a_variable = new char[a_longitudVariable];
@@ -336,9 +346,9 @@ public class vista extends javax.swing.JFrame {
                     // TOTAL DE OPERADORES SERÁ LA CANTIDAD DE VARIABLES -1
                     int totaloperadores = var_cont - 1;
 
-                    //ESTE CONDICIONAL VALIDA QUE SE CUMPLA QUE LOS OPERADORES 
-                    //DEBEN SER IGUAL AL NUMERO DE VARIABLES -1 PARA DAR CUMPLIMIENTO
-                    //AL TEMA SINTACTICO DE LAS OPERACIONES
+                    // ESTE CONDICIONAL VALIDA QUE SE CUMPLA QUE LOS OPERADORES
+                    // DEBEN SER IGUAL AL NUMERO DE VARIABLES -1 PARA DAR CUMPLIMIENTO
+                    // AL TEMA SINTACTICO DE LAS OPERACIONES
                     if (totaloperadores == contadorOperadores) {
                         txt_mensaje.append("Operadores SI es igual a la cantidad de variables - 1\n");
 
@@ -346,20 +356,20 @@ public class vista extends javax.swing.JFrame {
                         System.out.println("ahora a ordenar\n");
 
                         // UNIR LOS ARREGLOS EN UNO SOLO ARREGLO PARA ORDENARLOS
-                        //A ESTE ARREGLO LE APLICO UN METODO PARA ELIMINAR LOS ESPACIOS NULL
-
+                        // A ESTE ARREGLO LE APLICO UN METODO PARA ELIMINAR LOS ESPACIOS NULL
+                        // QUE ME ESTABAN DANDO ERROR
 
                         String[] nuevoArreglo = unirArreglos(eliminarNull(arregloVariables),
                                 eliminarNull(operadoresEncontrados));
                         // txt_mensaje.append("arreglo nuevoArreglo" + Arrays.toString(nuevoArreglo) +
                         // "\n");
-                        for (int j = 0; j < nuevoArreglo.length; j++) {
 
-                        }
+                        // for (int j = 0; j < nuevoArreglo.length; j++) {
+
+                        // }
                         // ORDENAR LOS CARACTERES DE FORMA VARIABLE OPERADOR VARIABLE
-                        //IMPLEMENTANDO EL CODIGO FACILITADO POR EL ING BORIS Y ADAPTANDOLO
-                        //AL CONTEXTO DE ESTE
-
+                        // IMPLEMENTANDO EL CODIGO FACILITADO POR EL ING BORIS Y ADAPTANDOLO
+                        // AL CONTEXTO DE ESTE
 
                         String[] ordenado = new String[nuevoArreglo.length];
                         int j = 0;
@@ -368,8 +378,9 @@ public class vista extends javax.swing.JFrame {
 
                             String c = (nuevoArreglo[i]);
                             // txt_mensaje.append("VALOR A GUARDAR " + c + "\n");
-                            //EN EL ORDENAMIENTO DEL ING BORIS PREGUNTA POR EL PRIMER CARACTER
-                            //EN ESTE CASO YA TENGO LAS VARIABLES COMPLETAS CON EL IDENTIFICADOR EN EL ARREGLO NUEVO
+                            // EN EL ORDENAMIENTO DEL ING BORIS PREGUNTA POR EL PRIMER CARACTER
+                            // EN ESTE CASO YA TENGO LAS VARIABLES COMPLETAS CON EL IDENTIFICADOR EN EL
+                            // ARREGLO NUEVO
                             // LO QUE HICE FUE INVERTIR LA LOGICA Y PREGUNTAR POR EL OPERADOR.
                             if ((String.valueOf(c).equals("+")) || (String.valueOf(c).equals("-"))
                                     || (String.valueOf(c).equals("*")) || (String.valueOf(c).equals("/"))) {
@@ -384,20 +395,36 @@ public class vista extends javax.swing.JFrame {
                             // System.out.println("----------------"+nuevoArreglo[j]+"----------------"+ordenado[i]+"----------------");
                         }
 
-                        txt_mensaje.append(
-                                "----------------------------------------ORDENAMIENTO--------------------------------------------\n");
+                        txt_mensaje.append( "----------------------------------------ORDENAMIENTO--------------------------------------------\n");
                         txt_mensaje.append(Arrays.toString(ordenado) + "\n");
 
                         System.out.println("arreglo ORDENADO de operadores y tipos de variables");
 
                         for (int h = 0; h < nuevoArreglo.length; h++) {
                             System.out.println("posición " + h + " valor " + ordenado[h]);
-                            
+
                         }
-                        sintactico=1;
-                       
+                        //SI EL SINTACTICO CUMPLE CON LAS REGLAS LE ASIGNO 1 A SU VARIABLE
+                        //PARA PERMITIR SEGUIR AL SEMANTICO
+                        sintactico = 1;
+                        if (sintactico == 1) {
+                            txt_mensaje.append( "----------------------------------------SEMANTICO--------------------------------------------\n");
+                               txt_mensaje.append(""+Arrays.toString(ordenado)+"\n");
+
+                               for (int i = 0; i < ordenado.length; i++) {
+                                int posicion = i;
+                                char primeraLetra = idVariables(ordenado, posicion);
+                                txt_mensaje.append("\n"+" posición: " + posicion + " es: " + primeraLetra);
+
+                                if(primeraLetra=="$");
+                                txt_mensaje.append("siciertowe");
+                               }
+                              
+
+                        }
                     } else {
                         txt_mensaje.append("Operadores NO es igual a la cantidad de variables - 1\n");
+                        
                     }
 
                 }
@@ -424,7 +451,7 @@ public class vista extends javax.swing.JFrame {
 
     // METODOSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSs
     public static void Limpiar() {
-       
+
         txt_mensaje.setText("");
 
     }
@@ -467,6 +494,22 @@ public class vista extends javax.swing.JFrame {
 
         return nuevoArreglo;
     }
+    public static char idVariables(String[] arregloTextos, int posicion) {
+
+    // Validar la posición
+    if (posicion < 0 || posicion >= arregloTextos.length) {
+        throw new IllegalArgumentException("Posición invalida: " + posicion);
+    }
+
+    // Obtener el texto en la posición indicada
+    String texto = arregloTextos[posicion];
+
+    // Obtener la primera letra del texto
+    char primeraLetra = texto.charAt(0);
+
+    // Devolver la primera letra
+    return primeraLetra;
+}
 
     public static String validarLongitudTexto(String texto) {
         int longitudMaxima = 20;
@@ -484,37 +527,41 @@ public class vista extends javax.swing.JFrame {
 
     // public static boolean validarvariable(char[] caracteres) {
 
-    //     // Regla adicional: La variable no puede estar vacía
-    //     if (caracteres.length == 0) {
-    //         return false;
-    //     }
+    // // Regla adicional: La variable no puede estar vacía
+    // if (caracteres.length == 0) {
+    // return false;
+    // }
 
-    //     for (int i = 0; i < caracteres.length; i++) {
-    //         char c = caracteres[i];
+    // for (int i = 0; i < caracteres.length; i++) {
+    // char c = caracteres[i];
 
-    //         // Regla 1: No puede empezar por un valor numérico
-    //         if (i == 0 && (c == '0' || c == '1' || c == '2' || c == '3' || c == '4' || c == '5' || c == '6' || c == '7'
-    //                 || c == '8' || c == '9')) {
-    //             System.out.println("No puede empezar por un valor numérico la variable");
-    //             return false;
-    //         }
+    // // Regla 1: No puede empezar por un valor numérico
+    // if (i == 0 && (c == '0' || c == '1' || c == '2' || c == '3' || c == '4' || c
+    // == '5' || c == '6' || c == '7'
+    // || c == '8' || c == '9')) {
+    // System.out.println("No puede empezar por un valor numérico la variable");
+    // return false;
+    // }
 
-    //         // Regla 2: Debe empezar por una letra
-    //         if (i == 0 && !((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_')) {
-    //             System.out.println("Debe empezar por una letra la variable");
-    //             return false;
-    //         }
+    // // Regla 2: Debe empezar por una letra
+    // if (i == 0 && !((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c ==
+    // '_')) {
+    // System.out.println("Debe empezar por una letra la variable");
+    // return false;
+    // }
 
-    //         // Regla 3: Los caracteres pueden ser letras, dígitos, guiones bajos o
-    //         // operadores
-    //         if (!(Character.isLetterOrDigit(c) || c == '_' || c == '+' || c == '-' || c == '*')) {
-    //             System.out.println(
-    //                     "Los caracteres pueden ser letras, dígitos, guiones bajos o operadores y no puede tener espacio");
-    //             return false;
-    //         }
+    // // Regla 3: Los caracteres pueden ser letras, dígitos, guiones bajos o
+    // // operadores
+    // if (!(Character.isLetterOrDigit(c) || c == '_' || c == '+' || c == '-' || c
+    // == '*')) {
+    // System.out.println(
+    // "Los caracteres pueden ser letras, dígitos, guiones bajos o operadores y no
+    // puede tener espacio");
+    // return false;
+    // }
 
-    //     }
-    //     return true;
+    // }
+    // return true;
     // }
 
     private static boolean esLetra(char c) {
